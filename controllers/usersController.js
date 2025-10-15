@@ -5,17 +5,19 @@ async function createUser(req, res) {
   const { name, email, gender, password } = req.body;
 
   if (!name || !email || !gender || !password) {
-    return res.status(400).json({ success: false, message: 'Missing fields' });
+    return res.status(400).json({ 
+        success: false, 
+        message: 'Missing fields' 
+    });
   }
 
   try {
     const [result] = await pool.execute(
-  'INSERT INTO users (name, email, gender, password) VALUES (?, ?, ?, ?)',
+  'INSERT INTO users (name, email, gender, password) VALUES (?, ?, ?, ?)', 
   [name, email, gender, password]
 );
  
-
-    return res.status(201).json({
+return res.status(201).json({
       success: true,
       message: 'User created',
       userId: result.insertId
@@ -26,4 +28,29 @@ async function createUser(req, res) {
   }
 }
 
-module.exports = {createUser}
+
+
+
+async function getAllUsers(req, res) {
+     try{
+        const [rows] = await pool.query(
+         'SELECT * FROM users'
+        )
+
+      return res.status(200).json({
+      success: true,
+      message: 'Gotten all users',
+      data: rows
+    });
+        
+     } catch (err){
+        console.error(err);
+        return res.status(500).json({
+            success: false, 
+            message: 'Database error' 
+        });
+     }
+    
+}
+
+module.exports = {createUser, getAllUsers}
