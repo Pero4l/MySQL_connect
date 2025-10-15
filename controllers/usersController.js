@@ -24,3 +24,5 @@ async function createUser(req, res) {
     return res.status(500).json({ success: false, message: 'Database error' });
   }
 }
+
+module.exports = {createUser}
