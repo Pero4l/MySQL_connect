@@ -4,15 +4,16 @@ const pool = require('../db');
 async function createUser(req, res) {
   const { name, email, gender, password } = req.body;
 
-  if (!name || !email || gender || password) {
+  if (!name || !email || !gender || !password) {
     return res.status(400).json({ success: false, message: 'Missing fields' });
   }
 
   try {
     const [result] = await pool.execute(
-      'INSERT INTO users (name, email, gender, password) VALUES (?, ?, NOW())',
-      [name, email, gender, password]
-    );
+  'INSERT INTO users (name, email, gender, password) VALUES (?, ?, ?, ?)',
+  [name, email, gender, password]
+);
+ 
 
     return res.status(201).json({
       success: true,
